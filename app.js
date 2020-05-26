@@ -8,9 +8,10 @@ const MongoClient = mongodb.MongoClient;
 
 const mongoUrl = "mongodb://localhost:27017/tasks";
 let mongo;
-MongoClient.connect(mongoUrl, { useNewUrlParser: true }).then(function (
-  client
-) {
+MongoClient.connect(mongoUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(function (client) {
   mongo = client.db();
 });
 
@@ -69,19 +70,21 @@ app.post("/tasks/:id/complete", (req, res) => {
 });
 
 app.get("/tasks/:id/edit", function (req, res) {
-  let id = ObjectId(req.params.id);
-  res.render("edit.ejs");
+  let id = req.params.id;
+  return res.render("edit.ejs", { taskId: id });
 });
 
-app.post("/edittask", function (req, res) {
+app.post("/edittask/:id", function (req, res) {
+  let taskId = req.params.id;
+  let newTask = req.body.item;
   mongo
     .collection("tasks")
-    .updateOne({ _id:  }, { name: req.body.item })
+    .updateOne({ _id: new ObjectId(taskId) }, { $set: { name: newTask } })
     .then(function () {
       res.redirect("/");
     });
 });
-app.delete("/tasks/:id", function (req, res) {
+app.post("/tasks/:id", function (req, res) {
   mongo
     .collection("tasks")
     .deleteOne({ _id: ObjectId(req.params.id) })

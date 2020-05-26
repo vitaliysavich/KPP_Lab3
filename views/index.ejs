@@ -10,7 +10,7 @@
     <ul>
       <% for (let i = 0; i < tasks.length; i++) { %>
       <li>
-        <label style="display: l;">
+        <label class="task">
           <form
             method="POST"
             action="/tasks/<%= tasks[i]._id %>/complete"
@@ -22,9 +22,7 @@
             <input type="submit" value="&#10003;" />
             <% } %>
           </form>
-          <span
-            style="<%= tasks[i].completed ? 'text-decoration: line-through' : '' %>"
-          >
+          <span class="task-name <%= tasks[i].completed ? 'completed' : '' %>">
             <%= tasks[i].name %>
           </span>
           <form method="GET" action="/tasks/<%= tasks[i]._id %>/edit">

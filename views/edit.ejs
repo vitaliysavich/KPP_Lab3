@@ -8,7 +8,8 @@
   <body>
     <div class="edit">
       <h1>TODO List</h1>
-      <form action="/edittask" method="POST">
+      <form action="/edittask/<%= taskId %>" method="POST">
+        <input name="_method" type="hidden" value="PUT" />
         <input type="text" name="item" placeholder="Enter todo item" />
         <button type="submit" class="btn-sbm">Submit</button>
       </form>
